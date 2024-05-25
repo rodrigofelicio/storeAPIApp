@@ -1,0 +1,17 @@
+01. Criar pasta
+02. Criar venv dentro da pasta (python3 -m venv .venv)
+03. Ativar venv na pasta (source .venv/bin/activate) - na frente da linha de comando aparece "(.venv)" sinalizando que a ativação foi realizada com sucesso
+04. Fechar o terminal e abrir nova janela (cmd + J no mac dentro do vscode)
+05. Instalar as bibliotecas usando pip
+    pip install flask 
+        após instalação é possível verificar que Flask foi instalado no ambiente virtual (pasta .venv/lib/flask e outras pastas (jinja2, etc) )
+06. Criar app.py para iniciar dev com flask boiler plate
+    app.py file
+        from flask import Flask
+        app = Flask(__name__)
+07. Executar app.py (flask run)
+08. Criar repo no git (logar no site e criar novo repo)
+09. Vincular diretório (storeAPIApp) ao repositório (https://github.com/orgs/community/discussions/68237)
+10. 
+
+
