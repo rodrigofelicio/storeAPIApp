@@ -1,3 +1,5 @@
+
+SET UP PROCESS
 01. Criar pasta
 02. Criar venv dentro da pasta (python3 -m venv .venv)
 03. Ativar venv na pasta (source .venv/bin/activate) - na frente da linha de comando aparece "(.venv)" sinalizando que a ativação foi realizada com sucesso
@@ -12,6 +14,16 @@
 07. Executar app.py (flask run)
 08. Criar repo no git (logar no site e criar novo repo)
 09. Vincular diretório (storeAPIApp) ao repositório (https://github.com/orgs/community/discussions/68237)
-10. 
+10. Subir código no github
 
-
+DEV PROCESS
+01. Criação do Modelo de Dados em python dictionaries para melhor gestão dos dados. Criar arquivo db.py e inserir os dicionários
+    stores = {}
+    items = {}
+02. Instalar Docker Desktop
+03. Criar Dockerfile na pasta do projeto
+04. Criar requirements.txt (arquivo onde todas as bibliotecas Python devem ser listadas, no caso: flask, flask-smorest e python-dotenv)
+05. Criar .flaskenv com variáveis de ambiente usadas pela app flask: FLASK_APP=app e FLASK_DEBUG=1
+06. No arquivo app.py, criar os métodos
+07. Adicionar mensagens de erro com flask_smorest
+08. Adicionar error handling nos métodos 
