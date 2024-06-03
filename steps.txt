@@ -1,4 +1,6 @@
 
+course:  https://rest-apis-flask.teclado.com/docs/course_intro/
+
 SET UP PROCESS
 01. Criar pasta
 02. Criar venv dentro da pasta (python3 -m venv .venv)
@@ -24,6 +26,12 @@ DEV PROCESS
 03. Criar Dockerfile na pasta do projeto
 04. Criar requirements.txt (arquivo onde todas as bibliotecas Python devem ser listadas, no caso: flask, flask-smorest e python-dotenv)
 05. Criar .flaskenv com variáveis de ambiente usadas pela app flask: FLASK_APP=app e FLASK_DEBUG=1
-06. No arquivo app.py, criar os métodos
+06. No arquivo app.py, criar os métodos CRUD (create, read, update, delete)
 07. Adicionar mensagens de erro com flask_smorest
-08. Adicionar error handling nos métodos 
+08. Adicionar error handling nos métodos (" abort(404, message="message if abort happens.") ")
+09. Organizar código em app.py com endpoints da insomnia app p/ stores + items
+10. Dockerize flask app (requirements.txt no dockerfile)
+11. Executar o docker build ( docker build -t flask-smorest-api . )
+12. Após realizado build do container, executar o container via comando "docker run  -dp 5000:5000 flask-smorest-ap"
+13. Acessar o Docker desktop > Containers > Play no container flask-smorest-api (acessar http://127.0.0.1:5000/items para validar que o container está rodando ou enviar uma requisição via insomnia)
+14. Mapear o diretório local da app para um volume no docker ( docker run -dp 5000:5000 -w /app -v "$(pwd):/app" flask-smorest-api )
