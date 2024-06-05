@@ -35,3 +35,9 @@ DEV PROCESS
 12. Após realizado build do container, executar o container via comando "docker run  -dp 5000:5000 flask-smorest-ap"
 13. Acessar o Docker desktop > Containers > Play no container flask-smorest-api (acessar http://127.0.0.1:5000/items para validar que o container está rodando ou enviar uma requisição via insomnia)
 14. Mapear o diretório local da app para um volume no docker ( docker run -dp 5000:5000 -w /app -v "$(pwd):/app" flask-smorest-api )
+15. Create blueprints and MethodViews: criar pasta resources e dois arquivos: store.py e item.py dentro dessa pasta
+16. Importar Blueprint de flask_smorest e inserir parâmetros para documentação
+17. Criar classe Store herdando MethodViews e criar métodos (GET, DELETE) a partir da rota blueprint (blp.route("/store/<string:store_id>"))
+18. Criar os métodos da classe Store (GET, POST) e StoreList (GET, UPDATE). Deve existir uma classe para cada rota e cada rota deve ter seus respectivos HTTP Methods correspondentes implementados
+19. Criar os métodos da classe Item (GET, PUT, DELETE) e ItemList (GET, POST). Deve existir uma classe para cada rota e cada rota deve ter seus respectivos HTTP Methods correspondentes implementados
+20. 
