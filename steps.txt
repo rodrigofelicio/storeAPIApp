@@ -40,4 +40,8 @@ DEV PROCESS
 17. Criar classe Store herdando MethodViews e criar métodos (GET, DELETE) a partir da rota blueprint (blp.route("/store/<string:store_id>"))
 18. Criar os métodos da classe Store (GET, POST) e StoreList (GET, UPDATE). Deve existir uma classe para cada rota e cada rota deve ter seus respectivos HTTP Methods correspondentes implementados
 19. Criar os métodos da classe Item (GET, PUT, DELETE) e ItemList (GET, POST). Deve existir uma classe para cada rota e cada rota deve ter seus respectivos HTTP Methods correspondentes implementados
-20. 
+20. Realizar validação com Marshmallow Schema. criar um arquivo schemas.py
+21. Importar Schemas e fiedls (from marshmallow) e, para cada tipo de rota (blueprint), criar validações para os campos (comentários em cada linha de cada campo no arquivo)
+22. Adicionar annotation arguments(<schema>) para os arquivos item.py e store.py. Não esquecer de adicionar o parâmetro que vai receber o JSON validado pelo schema object definido no schemas.py
+23. O próximo passo é decorar os responses flask_smorest pra que eles utilizem os schemas marshmallow. Isso vai permitir passar os dados retornados ao cliente através do schema, sendo possível filtrar campos, fazer casting, etc. decorar os responses vai permitir definição do tipo de retorno para cada HTTP status code, além de atualizar a documentação
+
