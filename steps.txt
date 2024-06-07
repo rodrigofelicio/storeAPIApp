@@ -44,4 +44,7 @@ DEV PROCESS
 21. Importar Schemas e fiedls (from marshmallow) e, para cada tipo de rota (blueprint), criar validações para os campos (comentários em cada linha de cada campo no arquivo)
 22. Adicionar annotation arguments(<schema>) para os arquivos item.py e store.py. Não esquecer de adicionar o parâmetro que vai receber o JSON validado pelo schema object definido no schemas.py
 23. O próximo passo é decorar os responses flask_smorest pra que eles utilizem os schemas marshmallow. Isso vai permitir passar os dados retornados ao cliente através do schema, sendo possível filtrar campos, fazer casting, etc. decorar os responses vai permitir definição do tipo de retorno para cada HTTP status code, além de atualizar a documentação
-
+24. Adicionar SQLAlchemy ao projeto. SQLAlchemy é um ORM, Object Relational Mapper utilizado para facilitar a interação com base de dados. O flask tem uma extensão para interagir com esse ORM. No arquivo requirements.txt, adicionar duas linhas: sqlalchemy e flask-sqlalchemy.
+25. Salvar o arquivo e executar "docker build -t <nome-do-container> . ". Em seguida, executar "docker run -dp 5000:5000 -w /app -v "$(pwd):/app" <nome-do-container> "
+25. Em db.py, apagar os dicionários stores e items. importar SQLAlchemy da extensão flask_sqlalchemy e criar um objecto SQLAlchemy (db = SQLAlchemy) para linká-lo ao app flask, mas antes é necessário criar os modelos dos objetos relacionais
+26. Criar uma pasta models na raiz da aplicação. Adicionar arquivos item.py e store.py onde deverão estar mapeados os modelos de dados de cada entidade (item e store). Comentários sobre ORM nas próprias classes
