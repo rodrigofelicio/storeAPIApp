@@ -4,23 +4,27 @@
 from marshmallow import Schema, fields
 
 
-####### ITEM SCHEMAS #######
-class ItemSchema(Schema):
+class PlainItemSchema(Schema):
     id = fields.Str(dump_only=True) #dump_only=True is used when the field must be part of the response message
     name = fields.Str(required=True) #required=True is used when the field must be part of the request message
     price = fields.Float(required=True) #required=True is used when the field must be part of the request message
-    store_id = fields.Str(required=True) #required=True is used when the field must be part of the request message
     
 
-class ItemUpdateSchema(Schema):
+class PlainStoreSchema(Schema):
+    id = fields.Str(dump_only=True) #dump_only=True is used when the field must be part of the response message. Used to send data back to the client
+    name = fields.Str(required=True) #required=True is used when the field must be part of the request message
+
+
+
+class ItemUpdateSchema(PlainItemSchema):
     name = fields.Str() #optional field. That's why there is no parameter in parenthesis
     price = fields.Float() #optional field. That's why there is no parameter in parenthesis
 
 
+class ItemSchema(PlainItemSchema):
+    store_id = fields.Str(required=True, load_only=True) #load_only=True this enable us to pass in the store_id when receiving data from the client
+    store = fields.Nested(PlainStoreSchema(), dump_only=True)
 
 
-####### STORE SCHEMAS #######
-class StoreSchema(Schema):
-    id = fields.Str(dump_only=True) #dump_only=True is used when the field must be part of the response message. Used to send data back to the client
-    name = fields.Str(required=True) #required=True is used when the field must be part of the request message
-    
+class StoreSchema(PlainStoreSchema):
+    items = fields.List(fields.Nested(PlainItemSchema()))

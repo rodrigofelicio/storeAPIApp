@@ -48,3 +48,4 @@ DEV PROCESS
 25. Salvar o arquivo e executar "docker build -t <nome-do-container> . ". Em seguida, executar "docker run -dp 5000:5000 -w /app -v "$(pwd):/app" <nome-do-container> "
 25. Em db.py, apagar os dicionários stores e items. importar SQLAlchemy da extensão flask_sqlalchemy e criar um objecto SQLAlchemy (db = SQLAlchemy) para linká-lo ao app flask, mas antes é necessário criar os modelos dos objetos relacionais
 26. Criar uma pasta models na raiz da aplicação. Adicionar arquivos item.py e store.py onde deverão estar mapeados os modelos de dados de cada entidade (item e store). Comentários sobre ORM nas próprias classes
+27. Atualizar os Schemas de dados em schemas.py
