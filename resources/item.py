@@ -1,8 +1,10 @@
-import uuid
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
+from sqlalchemy.exc import SQLAlchemyError
 
+from db import db
+from models import ItemModel
 from schemas import ItemSchema, ItemUpdateSchema
 
 blp = Blueprint("items", __name__, description="Operations on items.")
@@ -22,18 +24,19 @@ class ItemList(MethodView):
                                 # is passed through the ItemSchema, it checks that the fields are there and 
                                 # they are the valid types and so forth, and then it gives the method, an argument,
                                 # which is that validated dictionary.
-        for item in items.values():
-            if (
-                item_data["name"] == item["name"]
-                and item_data["store_id"] == item["store_id"]
-            ):
-                abort(400, message=f"Item already exists.")
+                                
+                                
+        item = ItemModel(**item_data)   # we will pass in the data that we receive in the post method with two asterisks and 
+                                        # it's going to turn the dictionary into keyword arguments so any received data from the client 
+                                        # will be turned into key arguments and we're going to pass it to ItemModel and when we create an ItemModel class
+                                        # all of the ItemModel values, the columns, can be passed as keyword 
+        try:
+            db.session.add(item)
+            db.session.commit()
+        except SQLAlchemyError:
+            abort(500, message="An error occurred while inserting the item.")
 
-        item_id = uuid.uuid4().hex
-        item = {**item_data, "id": item_id}
-        items[item_id] = item
-
-        return item, 201
+        return item
     
     
 
