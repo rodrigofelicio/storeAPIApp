@@ -1,6 +1,4 @@
 # The schema.py contains the marshmallow structure to validate the request and response messages passed to/by each API endpoint/HTTP method
-
-
 from marshmallow import Schema, fields
 
 
@@ -13,7 +11,6 @@ class PlainItemSchema(Schema):
 class PlainStoreSchema(Schema):
     id = fields.Str(dump_only=True) #dump_only=True is used when the field must be part of the response message. Used to send data back to the client
     name = fields.Str(required=True) #required=True is used when the field must be part of the request message
-
 
 
 class ItemUpdateSchema(PlainItemSchema):

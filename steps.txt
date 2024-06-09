@@ -48,4 +48,11 @@ DEV PROCESS
 25. Salvar o arquivo e executar "docker build -t <nome-do-container> . ". Em seguida, executar "docker run -dp 5000:5000 -w /app -v "$(pwd):/app" <nome-do-container> "
 25. Em db.py, apagar os dicionários stores e items. importar SQLAlchemy da extensão flask_sqlalchemy e criar um objecto SQLAlchemy (db = SQLAlchemy) para linká-lo ao app flask, mas antes é necessário criar os modelos dos objetos relacionais
 26. Criar uma pasta models na raiz da aplicação. Adicionar arquivos item.py e store.py onde deverão estar mapeados os modelos de dados de cada entidade (item e store). Comentários sobre ORM nas próprias classes
-27. Atualizar os Schemas de dados em schemas.py
+27. Atualizar os Schemas de dados em schemas.py.
+28. Configurar Flask-SQLAlchemy para começar a usa-lo na aplicação. Comentários no arquivo. Adicionadas as linhas:
+    6, 11, 12, 21, 37 a 44, 48 e 49
+
+    Como SQLALCHEMY sabe quais tabelas criar?
+    A linha import models permite que SQLAlchemy saiba quais modelos existem na aplicação. Como são instâncias de db.Model, SQLALCHEMY olha nos nomes de tabela existentes (__tablename__) e nos atributos definidos em db.Column para criar as tabelas.
+    Nessa etapa o banco de dados SQLite é criado com as entidades item e store.
+29. 

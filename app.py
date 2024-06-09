@@ -3,35 +3,55 @@
 ##### NEEDED PREVIOUSLY -----   from flask_smorest import abort
 ##### NEEDED PREVIOUSLY -----   from db import items, stores
 
-
+import os
 from flask import Flask
 # it connects the flask_smorest extension to the Flask app
 from flask_smorest import Api
+
+from db import db
+import models
 
 from resources.item import blp as ItemBlueprint
 from resources.store import blp as StoreBlueprint
 
 
-app = Flask(__name__)
+# Function which job is to create and set up and configure the Flask app. This way we can call this function whenever
+# we need, for instance, when we write tests for a Flask app.
+# This is the factory pattern. This is what the factory pattern looks like when we are using flask.
+def create_app(db_url=None):
+    app = Flask(__name__)
 
-# If some exception occurs in a flask module, this must be propagated to the main app so that we can see it
-app.config["PROPAGATE_EXCEPTIONS"] = True   
+    # If some exception occurs in a flask module, this must be propagated to the main app so that we can see it
+    app.config["PROPAGATE_EXCEPTIONS"] = True   
 
-# Flask Smorest configurations for API document
-app.config["API_TITLE"] = "Stores REST API"
-app.config["API_VERSION"] = "v1"
-app.config["OPENAPI_VERSION"] = "3.0.3"
-# The config below tells Flask Smores what is the root of the API
-app.config["OPENAPI_URL_PREFIX"] = "/"
+    # Flask Smorest configurations for API document
+    app.config["API_TITLE"] = "Stores REST API"
+    app.config["API_VERSION"] = "v1"
+    app.config["OPENAPI_VERSION"] = "3.0.3"
+    # The config below tells Flask Smores what is the root of the API
+    app.config["OPENAPI_URL_PREFIX"] = "/"
 
-# The configuration below tells flask_smorest to use swagger to document the app
-app.config["OPENAPI_SWAGGER_UI_PATH"] = "/swagger-ui"
-app.config["OPENAPI_SWAGGER_UI_URL"] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
+    # The configuration below tells flask_smorest to use swagger to document the app
+    app.config["OPENAPI_SWAGGER_UI_PATH"] = "/swagger-ui"
+    app.config["OPENAPI_SWAGGER_UI_URL"] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
+    # Valid database connection string. In this case, SQLite. It will create a file called data.db to store data. 
+    # SQLite is easy to use and it's also quite fast, so it is very good for development. 
+    # Later on we can migrate to another db. That's is why we add an environment variable to the configuration
+    app.config["SQLALCHEMY_DATABASE_URI"] = db_url or os.getenv("DATABASE_URL", "sqlite:///data.db")
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    # It initializes the Flask-SQLAlchemy extension, giving it our Flask app, 
+    # so that it can connect the Flask app to SQLAlchemy. Finally, we're going to do 
+    db.init_app(app)
 
-api = Api(app)
+    api = Api(app)
 
-api.register_blueprint(ItemBlueprint)
-api.register_blueprint(StoreBlueprint)
+    with app.app_context():
+        db.create_all()
+
+    api.register_blueprint(ItemBlueprint)
+    api.register_blueprint(StoreBlueprint)
+    
+    return app
 
 
 
