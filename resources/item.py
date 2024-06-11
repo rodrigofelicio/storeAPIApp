@@ -13,7 +13,7 @@ blp = Blueprint("items", __name__, description="Operations on items.")
 class ItemList(MethodView):
     @blp.response(200, ItemSchema(many=True))
     def get(self):
-        return items.values()        
+        return items.values()
     
     
     #this blp.arguments annotation below adds documentation to the Swagger-UI regarding fields type and validation
@@ -44,28 +44,22 @@ class ItemList(MethodView):
 class Item(MethodView):
     @blp.response(200, ItemSchema)
     def get(self, item_id):
-        try:
-            return items[item_id], 201
-        except KeyError:
-            abort(404, message="Item not found")    
+        item = ItemModel.query.get_or_404(item_id)  # This query attribute cmoes from flask-sqlalchemy pkg.
+                                                    # It does everything for us. It retrieves the item from the 
+                                                    # database using the items primary key, and if there is no item
+                                                    # with this primary key in the db, then it will automatically abort
+                                                    # with a 404 status code, which means Not Found.                                                    
+        return item
     
 
     # the decorators order matters, so it is important to put blp.response deeper in the code.
     @blp.arguments(ItemUpdateSchema)
     @blp.response(200, ItemSchema)
     def put(self, item_data, item_id):
-        try:
-            item = items[item_id]        
-            item |= item_data # this is the new dictionary update operator ( "|=" )                
-            
-            return item, 201
-        except KeyError:
-            abort(404, message="Item not found.")
+        item = ItemModel.query.get_or_404(item_id)
+        raise NotImplementedError("Updating an item is not implemented yet.")
 
         
     def delete(self, item_id):
-        try:
-            del items[item_id]
-            return { "message": "Item deleted."}, 201
-        except KeyError:
-            abort(404, message="Item not found.")
+        item = ItemModel.query.get_or_404(item_id)
+        raise NotImplementedError("Deleting an item is not implemented yet.")

@@ -36,19 +36,12 @@ class StoreList(MethodView):
 class Store(MethodView):
     @blp.response(200, StoreSchema(many=True))
     def get(self, store_id):
-        try:
-            # Here you might also want to add the items in this store
-            # We'll do that later on in the course
-            return stores[store_id], 201
-        except KeyError:
-            abort(404, message="Store not found")
+        store = StoreModel.query.get_or_404(store_id)
+        return store
 
     
     def delete(self, store_id):
-        try:
-            del stores[store_id]
-            return { "message": "Store deleted."}, 201
-        except KeyError:
-            abort(404, message="Store not found.")
+        store = StoreModel.query.get_or_404(store_id)
+        raise NotImplementedError("Deleting a store not implemented yet.")
     
 
