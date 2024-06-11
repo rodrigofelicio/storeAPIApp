@@ -13,7 +13,7 @@ blp = Blueprint("items", __name__, description="Operations on items.")
 class ItemList(MethodView):
     @blp.response(200, ItemSchema(many=True))
     def get(self):
-        return items.values()
+        return ItemSchema.query.all()
     
     
     #this blp.arguments annotation below adds documentation to the Swagger-UI regarding fields type and validation

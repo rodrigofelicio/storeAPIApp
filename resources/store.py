@@ -13,7 +13,7 @@ blp = Blueprint("stores", __name__, description="Operations on stores")
 class StoreList(MethodView):
     @blp.response(200, StoreSchema(many=True))
     def get(self):
-        return stores.values()
+        return StoreModel.query.all()
     
 
     @blp.arguments(StoreSchema)
