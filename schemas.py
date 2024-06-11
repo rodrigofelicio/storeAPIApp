@@ -16,6 +16,7 @@ class PlainStoreSchema(Schema):
 class ItemUpdateSchema(PlainItemSchema):
     name = fields.Str() #optional field. That's why there is no parameter in parenthesis
     price = fields.Float() #optional field. That's why there is no parameter in parenthesis
+    store_id = fields.Int() #optional field. That's why there is no parameter in parenthesis
 
 
 class ItemSchema(PlainItemSchema):
