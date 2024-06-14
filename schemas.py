@@ -3,14 +3,19 @@ from marshmallow import Schema, fields
 
 
 class PlainItemSchema(Schema):
-    id = fields.Str(dump_only=True) #dump_only=True is used when the field must be part of the response message
+    id = fields.Int(dump_only=True) #dump_only=True is used when the field must be part of the response message
     name = fields.Str(required=True) #required=True is used when the field must be part of the request message
     price = fields.Float(required=True) #required=True is used when the field must be part of the request message
     
 
 class PlainStoreSchema(Schema):
-    id = fields.Str(dump_only=True) #dump_only=True is used when the field must be part of the response message. Used to send data back to the client
+    id = fields.Int(dump_only=True) #dump_only=True is used when the field must be part of the response message. Used to send data back to the client
     name = fields.Str(required=True) #required=True is used when the field must be part of the request message
+
+
+class PlainTagSchema(Schema):
+    id = fields.Int(dump_only=True) #dump_only=True is used when the field must be part of the response message. Used to send data back to the client
+    name = fields.Str() #required=True is used when the field must be part of the request message    
 
 
 class ItemUpdateSchema(PlainItemSchema):
@@ -20,9 +25,15 @@ class ItemUpdateSchema(PlainItemSchema):
 
 
 class ItemSchema(PlainItemSchema):
-    store_id = fields.Str(required=True, load_only=True) #load_only=True this enable us to pass in the store_id when receiving data from the client
+    store_id = fields.Int(required=True, load_only=True) #load_only=True this enable us to pass in the store_id when receiving data from the client
     store = fields.Nested(PlainStoreSchema(), dump_only=True)
 
 
 class StoreSchema(PlainStoreSchema):
     items = fields.List(fields.Nested(PlainItemSchema()))
+    tags = fields.List(fields.Nested(PlainTagSchema()))
+
+
+class TagSchema(PlainTagSchema):
+    store_id = fields.Int(load_only=True)
+    store = fields.Nested(PlainStoreSchema(), dump_only=True)

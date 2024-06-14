@@ -56,3 +56,15 @@ DEV PROCESS
     A linha import models permite que SQLAlchemy saiba quais modelos existem na aplicação. Como são instâncias de db.Model, SQLALCHEMY olha nos nomes de tabela existentes (__tablename__) e nos atributos definidos em db.Column para criar as tabelas.
     Nessa etapa o banco de dados SQLite é criado com as entidades item e store.
 29. Alterar método post das entidades item.py e store.py para persistir informações no database SQLite utilizando SQLAlchemy
+30. Alterar os métodos de manipulação de item/store (get, delete, update de um único item) nos arquivos item.py e store.py na pasta resources. Código alterado e commit realizado no github.
+31. Implementar update nos arquivos item.py e store.py.
+32. Alterar os métodos get de recuperação de lista de todos os modelos (item e store).
+33. Alterar os métodos delete dos modelos.
+34. Criação de entidade Tag (relacionamento many-to-many entre Stores e Tags) na aplicação.
+    - criar arquivo tag.py no diretório models
+    - alterar arquivo store.py no diretório models com infos de tag ("tags = db.relationship("TagModel", back_populates="tag", lazy="dynamic")")
+    - importar o modelo TagModel criado no modelo tag.py no __init__.py  ("from models.tag import TagModel")
+    - criar os schemas marshmallow para a entidade Tag no schemas.py
+    - criar arquivo tag.py no diretório resources e adicionar códigos dos endpoints correspondentes (get e post para TagInStore e get para lista de todas as tags criadas)
+    - registrar blueprint das tags no app.py ("from resources.tag import blp as TagBlueprint" and "api.register_blueprint(TagBlueprint)")
+35.

@@ -7,7 +7,7 @@ from db import db
 from models import StoreModel
 from schemas import StoreSchema
 
-blp = Blueprint("stores", __name__, description="Operations on stores")
+blp = Blueprint("Stores", __name__, description="Operations on stores.")
 
 @blp.route("/store")
 class StoreList(MethodView):
@@ -15,7 +15,8 @@ class StoreList(MethodView):
     def get(self):
         return StoreModel.query.all()
     
-
+    
+    #this blp.arguments annotation below adds documentation to the Swagger-UI regarding fields type and validation
     @blp.arguments(StoreSchema)
     @blp.response(201, StoreSchema)    
     def post(self, store_data):
@@ -34,14 +35,16 @@ class StoreList(MethodView):
 
 @blp.route("/store/<string:store_id>")
 class Store(MethodView):
-    @blp.response(200, StoreSchema(many=True))
+    @blp.response(200, StoreSchema)
     def get(self, store_id):
         store = StoreModel.query.get_or_404(store_id)
         return store
 
-    
+    @blp.response(200, StoreSchema)    
     def delete(self, store_id):
         store = StoreModel.query.get_or_404(store_id)
-        raise NotImplementedError("Deleting a store not implemented yet.")
-    
 
+        db.session.delete(store)
+        db.session.commit()            
+
+        return {"message", "Store deleted."}

@@ -7,13 +7,13 @@ from db import db
 from models import ItemModel
 from schemas import ItemSchema, ItemUpdateSchema
 
-blp = Blueprint("items", __name__, description="Operations on items.")
+blp = Blueprint("Items", __name__, description="Operations on items.")
 
 @blp.route("/item")
 class ItemList(MethodView):
     @blp.response(200, ItemSchema(many=True))
     def get(self):
-        return ItemSchema.query.all()
+        return ItemModel.query.all()
     
     
     #this blp.arguments annotation below adds documentation to the Swagger-UI regarding fields type and validation
@@ -51,6 +51,15 @@ class Item(MethodView):
                                                     # with a 404 status code, which means Not Found.                                                    
         return item
     
+    @blp.response(200, ItemSchema)    
+    def delete(self, item_id):
+        item = ItemModel.query.get_or_404(item_id)
+        
+        db.session.delete(item)
+        db.session.commit()
+        
+        return {"message", "Item deleted."}
+
 
     # the decorators order matters, so it is important to put blp.response deeper in the code.
     @blp.arguments(ItemUpdateSchema)
@@ -65,8 +74,4 @@ class Item(MethodView):
         
         db.session.add(item)
         db.session.commit()
-
-        
-    def delete(self, item_id):
-        item = ItemModel.query.get_or_404(item_id)
-        raise NotImplementedError("Deleting an item is not implemented yet.")
+        return {"message": "Item updated, Johge."}

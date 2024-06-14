@@ -5,4 +5,6 @@ class StoreModel(db.Model):  # This is a mapping between a row in a table to a P
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
+    
     items = db.relationship("ItemModel", back_populates="store", lazy="dynamic")
+    tags = db.relationship("TagModel", back_populates="store", lazy="dynamic")
