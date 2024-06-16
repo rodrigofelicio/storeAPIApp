@@ -23,7 +23,16 @@ class TagsInStore(MethodView):
     @blp.arguments(TagSchema)
     @blp.response(201, TagSchema)
     def post(self, tag_data, store_id): 
-        tag = TagModel(**tag_data, store_id=store_id)
+        if TagModel.query.filter(TagModel.store_id == tag_data["store_id"], TagModel.name == tag_data["name"]).first():
+            abort(400, message="A tag with that name already exists in that store.")
+
+
+        # The original line below was like 'tag = TagModel(**tag_data, store_id=store_id)'
+        # Nonetheless, I got an error:   TypeError: models.tag.TagModel() got multiple values for keyword argument 'store_id'
+        # Then, I found it in stackoverflow about positional arguments (**tag_data) vs keyword arguments (store_id = store_id)
+        # https://stackoverflow.com/questions/21764770/typeerror-got-multiple-values-for-argument
+        # After understanding and analysing the answer, I came up with the solution below.
+        tag = TagModel(name=tag_data["name"], store_id=tag_data["store_id"])
         
         try:
             db.session.add(tag)
