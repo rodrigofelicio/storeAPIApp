@@ -68,3 +68,6 @@ DEV PROCESS
     - criar arquivo tag.py no diretório resources e adicionar códigos dos endpoints correspondentes (get e post para TagInStore e get para lista de todas as tags criadas)
     - registrar blueprint das tags no app.py ("from resources.tag import blp as TagBlueprint" and "api.register_blueprint(TagBlueprint)")
 35.Criação de Many-to-Many entre Store-Tag-items
+36. JWT authentication.
+    - adicionar flask-jwt-extended no arquivo requirements.txt
+    - adicionar flask-jwt-extended no arquivo app.py
