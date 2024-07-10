@@ -75,3 +75,8 @@ DEV PROCESS
         - na pasta models, criar user.py
         - no arquivo __init__.py, adicionar o UserModel criado no passo anterior
         - adicionar a classe (schema) de UserModel no arqhivo schemas.py
+37. Adicionar e registrar um endpoint na REST api
+    - criar os endpoints na app insomnia (pasta users)
+    - adicionar a lib PassLib no arquivo requirements.txt e rebuild no container para que ele considere as duas libs (jwt e passlib)
+    - na pasta resources, criar o arquivo user.py
+    
