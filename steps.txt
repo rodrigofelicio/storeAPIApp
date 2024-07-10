@@ -71,3 +71,7 @@ DEV PROCESS
 36. JWT authentication.
     - adicionar flask-jwt-extended no arquivo requirements.txt
     - adicionar flask-jwt-extended no arquivo app.py
+    - criar o User model e schema
+        - na pasta models, criar user.py
+        - no arquivo __init__.py, adicionar o UserModel criado no passo anterior
+        - adicionar a classe (schema) de UserModel no arqhivo schemas.py
