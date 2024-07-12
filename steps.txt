@@ -96,4 +96,13 @@ na app insomnia (aba Auth, selecionar bearer token)
     * O JWT pode estar inválido, por exemplo, se o cliente realizar alterações nele. [@jwt.invalid_token_loader]
     * Um JWT pode ser solicitado, mas nenhum foi apresentado/autorizado. [@jwt.unauthorized_loader]
     - adicionar configurações no arquivo app.py usando Flask-JWT-extended
+41. Adicionar logout à API REST
+    Se o usuário quer finalizar o access_token e quer realizar o logout na api, então vamos ter que cancelar (revoke) o token de acesso do usuário. Assim, devemos pegar o access_token, armazenar isso em algum lugar e toda vez que algum access_token for usado nós vamos verificar se ele está na lista de cancelados da API.
+    - criar arquivo blocklist.py na raiz da aplicação e adicionar o BLOCKLIST set
+    - adicionar configurações da blocklist no arquivo app.py
+        - importar BLOCKLIST de blocklist.py
+        - adicionar funções @jwt.token_in_blocklist_loader e @jwt.revoked_token_loader
+    - adicionar no arquivo user.py o endpoint "/logout" e registrá-lo
+    OBS: Usar blocklist no código (blocklist.py) não é recomendado. Quando a aplicação é reiniciada as informações existentes na blocklist são apagadas. A recomendação é armazenar esses JWTs em banco de dados ou, melhor ainda, em cache (REDIS, por exemplo)
+
 
