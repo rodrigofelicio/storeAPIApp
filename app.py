@@ -6,7 +6,7 @@
 import os
 import secrets
 
-from flask import Flask
+from flask import Flask, jsonify
 # it connects the flask_smorest extension to the Flask app
 from flask_smorest import Api
 from flask_jwt_extended import JWTManager
@@ -19,11 +19,10 @@ from resources.store import blp as StoreBlueprint
 from resources.tag import blp as TagBlueprint
 from resources.user import blp as UserBlueprint
 
+
 # Function which job is to create and set up and configure the Flask app. This way we can call this function whenever
 # we need, for instance, when we write tests for a Flask app.
 # This is the factory pattern. This is what the factory pattern looks like when we are using flask.
-
-
 def create_app(db_url=None):
     app = Flask(__name__)
 
@@ -52,11 +51,42 @@ def create_app(db_url=None):
 
     api = Api(app)
 
+    ####### JWT Configurations and Error Handling Functions #########
     # app.config["JWT_SECRET_KEY"] = secrets.SystemRandom().getrandbits(128)
     # The JWT Secret Key generated below were generated via python3 console using
     # "import secrets" command and then "secrets.SystemRandom().getrandbits(128)"
     app.config["JWT_SECRET_KEY"] = "312973479540895539030474960057207263834"
     jwt = JWTManager(app)
+
+    @jwt.expired_token_loader
+    def expired_token_callback(jwt_header, jwt_payload):
+        return (
+            jsonify({"message": "The token has expired.",
+                    "error": "token_expired"}),
+            401,
+        )
+
+    @jwt.invalid_token_loader
+    def invalid_token_callback(error):
+        return (
+            jsonify(
+                {"message": "Signature verification failed.", "error": "invalid_token"}
+            ),
+            401,
+        )
+
+    @jwt.unauthorized_loader
+    def missing_token_callback(error):
+        return (
+            jsonify(
+                {
+                    "description": "Request does not contain an access token.",
+                    "error": "authorization_required",
+                }
+            ),
+            401,
+        )
+    ####### JWT Configurations and Error Handling Functions #########
 
     with app.app_context():
         db.create_all()

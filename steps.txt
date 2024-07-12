@@ -84,4 +84,16 @@ DEV PROCESS
     - no arquivo resources/user.py, importar a lib flask_jwt_extended e importar create_access_token
         from flask_jwt_extended import create_access_token
     - no mesmo arquivo, registrar o endpoinnt /login e criar o access_token
+39. Proteger endpoints a partir de solicitação de JWT
+    - no arquivo resources/item.py, importar a lib flask_jwt_extended e importar jwt_required
+    - no endpoint /item, na função post (criar item), adicionar a anotação @jwt_required() 
+        agora, para enviar requisições, é necessário adicionar o access_token criado no item 38 no header do request
+na app insomnia (aba Auth, selecionar bearer token)
+    - adicionar @jwt_required() nos demais endpoints (ver arquivo no git)
+40. Error Handling com Flask-JWT-extended
+    Importante saber que:
+    * O JWT pode expirar (não dura pra sempre). [@jwt.expired_token_loader]
+    * O JWT pode estar inválido, por exemplo, se o cliente realizar alterações nele. [@jwt.invalid_token_loader]
+    * Um JWT pode ser solicitado, mas nenhum foi apresentado/autorizado. [@jwt.unauthorized_loader]
+    - adicionar configurações no arquivo app.py usando Flask-JWT-extended
 
