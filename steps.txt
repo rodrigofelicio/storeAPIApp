@@ -79,4 +79,9 @@ DEV PROCESS
     - criar os endpoints na app insomnia (pasta users)
     - adicionar a lib PassLib no arquivo requirements.txt e rebuild no container para que ele considere as duas libs (jwt e passlib)
     - na pasta resources, criar o arquivo user.py
-    
+    - registrar o blueprint do user no arquivo app.py junto com os blueprints das outras entidades
+38. Adicionar um endpoint de login na API p/ obter access token
+    - no arquivo resources/user.py, importar a lib flask_jwt_extended e importar create_access_token
+        from flask_jwt_extended import create_access_token
+    - no mesmo arquivo, registrar o endpoinnt /login e criar o access_token
+
