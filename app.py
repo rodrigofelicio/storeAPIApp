@@ -10,6 +10,7 @@ from flask import Flask, jsonify
 # it connects the flask_smorest extension to the Flask app
 from flask_smorest import Api
 from flask_jwt_extended import JWTManager
+from flask_migrate import Migrate
 
 from db import db
 from blocklist import BLOCKLIST
@@ -49,6 +50,7 @@ def create_app(db_url=None):
     # It initializes the Flask-SQLAlchemy extension, giving it our Flask app,
     # so that it can connect the Flask app to SQLAlchemy. Finally, we're going to do
     db.init_app(app)
+    migrate = Migrate(app, db)
 
     api = Api(app)
 
@@ -115,8 +117,11 @@ def create_app(db_url=None):
         )
     ####### JWT Configurations and Error Handling Functions #########
 
-    with app.app_context():
-        db.create_all()
+    # These two lines below were used before we add flask_migrate to the code.
+    # They were used by SQLAlchemy to create the database in the app context.
+    # As a DB Migration Tool Alembic handles the DB config and set up.
+    # with app.app_context():
+    #    db.create_all()
 
     api.register_blueprint(ItemBlueprint)
     api.register_blueprint(StoreBlueprint)

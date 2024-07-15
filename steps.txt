@@ -113,6 +113,36 @@ na app insomnia (aba Auth, selecionar bearer token)
     - adicionar decorator @jwt_required(fresh=True) nos endpoints de operações destrutivas como mudar password ou apagar conta.
         no arquivo item.py, adicionar @jwt_required(fresh=True) no método que cria itens, por exemplo
     - no arquivo app.py, adicionar o método @jwt.needs_fresh_token_loader para
+DB MIGRATION
+    Por que realizar migração de banco de dados?
+        Na medida em que trabalhamos na aplicação, particularmente em um longo período de tempo, é inegável que adicionamos colunas aos modelos ou até mesmo adicionamos novos modelos.
+        Para realizar alterações dessa magnitude ferramentas como Alembic (ferramenta de migração de banco de dados da SQLAlchemy - https://pypi.org/project/alembic/) e Flask-Migrate contribuem para esse processo sem que haja assincronismo entre os modelos e possíveis problemas qdo usamos SQLAlchemy.
+        "
+            Alembic is a database migrations tool written by the author of SQLAlchemy. A migrations tool offers the following functionality:
 
+            Can emit ALTER statements to a database in order to change the structure of tables and other constructs
 
+            Provides a system whereby “migration scripts” may be constructed; each script indicates a particular series of steps that can “upgrade” a target database to a new version, and optionally a series of steps that can “downgrade” similarly, doing the same steps in reverse.
+
+            Allows the scripts to execute in some sequential manner.
+        "
+        Podemos usar Alembic para detectar alterações nos modelos, bem como passos necessários para "atualizar" o banco de dados para que ele possa receber os novos modelos. Daí nós podemos usar Alembic para modificar o banco de dados seguindo os passos corretos. Alembic também rastreia cada passo da migração para que haja versionamento e recuperação do banco de dados, se necessário. 
+        Como Alembic tem essa feature de rastreabilidade, pode ser usado para crear tabelas do zero, simplesmente aplicando a migração desde o começo. Vale ressaltar que migração corresponde a qualquer alteração realizada nos modelos de dados (novas tabelas, colunas ou valores específicos). Essas alterações podem "quebrar" a aplicação e/ou o banco de dados se não forem realizadas de forma coordenada durante fase de deployment. Por isso, ferramentas como Alembic contribuem para a sanidade do desenvolvedor: elas ajudam a organizar essa "migração"(atualização) do banco de dados.
+        - adicionar flask-migrate ao requirements.txt
+        - executar pip install -r requirements.txt
+        - no arquivo app.py importar Migrate de flask_migrate e relacionar Migrate com a app e o db (migrate = Migrate(app, db)) depois da linha de inicialização do db (db.init_app(app))
+        - Inicializar o database com Flask-Migrate
+            - no terminal, digitar flask db init (esse comando vai adicionar uma pasta "migrations" à aplicação e dentro, além de arquivos de configuração, há uma pasta "versions" para controlar o versionamento do banco de dados a cada modificação realizada.)
+        - criar a primeira "migração" usando Alembic
+            - deletar pasta instance/data.db da pasta da app
+            - no terminal, executar o comando flask db migrate
+            - após executado o comando, Alembic vai criar um novo db em instance/data.db a partir das definições apresentadas na pasta models/
+            - dentro da pasta migrations/versions será criada um arquivo <migration_identifier>.py cujo conteúdo corresponde aos métodos de migração da ferramenta (identifiers, upgrade e downgrade)
+            O comando flask db migrate gera o arquivo de migração, mas não aplica a migração, propriamente. Para realizar a aplicação devemos realizar outro comando
+        - no terminal, executar o comando flask db upgrade
+            importante registrar que Alembic também cria uma tabela para controlar as versões de migração do banco de dados da app
+    Alterando modelos de dados SQLAlchemy e realizar migração a partir da mudança do modelo
+        - no arquivo models/items.py, adicionar o campo description ao modelo ItemModel (description = db.Column(db.String))
+        - no terminal executar o comando flask db migrate. Esse comando fará com que Alembic avalie a versão anterior do modelo db, compare a versão modificada com a anterior e fará uma atualização no modelo do banco a partir das alterações realizadas. Um novo arquivo .py com o nome da nova migration_identifier é criado e o identifier anterior vai ser inserido no identifier down_revision, isso tudo dentro do arquivo <revision_identifier>.py
+        - revisar o arquivo <revision_identifier>.py criado a partir da execução do comando e, uma vez que os modelos estão ok, executar flask db upgrade
 
