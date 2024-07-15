@@ -17,7 +17,7 @@ class ItemList(MethodView):
     def get(self):
         return ItemModel.query.all()
 
-    @jwt_required()
+    @jwt_required(fresh=True)
     # this blp.arguments annotation below adds documentation to the Swagger-UI regarding fields type and validation
     @blp.arguments(ItemSchema)
     @blp.response(201, ItemSchema)
@@ -54,7 +54,7 @@ class Item(MethodView):
         # with a 404 status code, which means Not Found.
         return item
 
-    @jwt_required()
+    @jwt_required(fresh=True)
     @blp.response(200, ItemSchema)
     def delete(self, item_id):
         item = ItemModel.query.get_or_404(item_id)

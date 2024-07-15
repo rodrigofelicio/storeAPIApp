@@ -104,5 +104,15 @@ na app insomnia (aba Auth, selecionar bearer token)
         - adicionar funções @jwt.token_in_blocklist_loader e @jwt.revoked_token_loader
     - adicionar no arquivo user.py o endpoint "/logout" e registrá-lo
     OBS: Usar blocklist no código (blocklist.py) não é recomendado. Quando a aplicação é reiniciada as informações existentes na blocklist são apagadas. A recomendação é armazenar esses JWTs em banco de dados ou, melhor ainda, em cache (REDIS, por exemplo)
+42. Realizar "refresh" no access_token
+    O token tem validade, ele expira. Para entregar uma melhor experiência ao usuário a aplicação pode solicitar
+    Qdo logamos, obtemos um fresh access_token. Qdo precisamos que a app cliente realize refresh no access_token, podemos usar um non-fresh token. Além disso, alguns endpoints podem ser invocados somente com fresh token e outros com um non-fresh token. Se o endpoint não é "tão importante", podemos utilizar um non-fresh token. Qdo um usuário quer deletar a própria conta, por exemplo, podemos considerar um fresh token.
+    - criar refresh tokens usando flask_jwt_extended. No arquivo resource/user.py, importar create_refresh_token e get_jwt_identity
+    - adicionar refresh_token no método post da rota /login (e adicionar o parâmetro fresh no access_token)
+    - criar o endpoint refresh no arquivo user.py (método post)
+    - adicionar decorator @jwt_required(fresh=True) nos endpoints de operações destrutivas como mudar password ou apagar conta.
+        no arquivo item.py, adicionar @jwt_required(fresh=True) no método que cria itens, por exemplo
+    - no arquivo app.py, adicionar o método @jwt.needs_fresh_token_loader para
+
 
 

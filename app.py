@@ -4,7 +4,7 @@
 # NEEDED PREVIOUSLY -----   from db import items, stores
 
 import os
-import secrets
+# import secrets
 
 from flask import Flask, jsonify
 # it connects the flask_smorest extension to the Flask app
@@ -69,6 +69,18 @@ def create_app(db_url=None):
             jsonify(
                 {"description": "The token has been revoked.",
                     "error": "token_revoked"}
+            ),
+            401,
+        )
+
+    @jwt.needs_fresh_token_loader
+    def token_not_fresh_callback(jwt_header, jwt_payload):
+        return (
+            jsonify(
+                {
+                    "description": "The token is not fresh.",
+                    "error": "fresh_token_required",
+                }
             ),
             401,
         )
